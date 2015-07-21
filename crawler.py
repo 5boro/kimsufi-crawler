@@ -8,6 +8,7 @@ import sys
 import os
 import logging
 import importlib
+import subprocess
 import tornado.ioloop
 import tornado.web
 from tornado.httpclient import AsyncHTTPClient
@@ -113,7 +114,7 @@ class Crawler(object):
                     'title': "{0} is available".format(server_type),
                     'text': "Server {server} is available in {region}".format(
                         server=server_type, region=region.capitalize()),
-                    'url': "http://www.kimsufi.com/en/index.xml"
+                    'url': "https://www.kimsufi.com/fr/commande/kimsufi.xml?reference=150sk10&quantity=1"
                 }
                 if 'sys' in item['reference'] or 'bk' in item['reference']:
                     message['url'] = 'http://www.soyoustart.com/de/essential-server/'
@@ -159,6 +160,7 @@ if __name__ == "__main__":
         message = message or {}
         if state in TRACKED_STATES:
             _logger.info("Will notify: %s", state)
+            subprocess.call(['/usr/bin/canberra-gtk-play','--id','message','-l','10'])
             NOTIFIER.notify(**message)
 
     # Check and set request timeout
